@@ -23,3 +23,32 @@ function throttle(fn,wait){
     }
 }
 
+function debounce(fn,wait){
+    let timeout
+    return function(){
+        clearTimeout(timeout)
+        let context = this
+        let args = arguments
+        timeout = setTimeout(
+            fn.apply(context,args),wait
+        )
+    }
+}
+
+function throttle(fn,wait){
+    let timeout = 0;
+    return function(){
+        if(Date.now - timeout > wait){
+            let context = this
+            let args = arguments
+            timeout = Date.now
+            fn.apply(context,args)            
+        }
+    }
+}
+
+function filtten(arr){
+    return arr.reduce((result,item)=>{
+        return result.concat(Array.isArray(item) ? filtten(item) : item)
+    },[])
+}
