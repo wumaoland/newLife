@@ -10,7 +10,9 @@ function deepClone(obj){
     let newObj = new obj.constructor;
 
     for(let key in obj){
-        newObj[kye] = obj[key]
+        if(obj.hasOwnProperty(key)){
+            newObj[kye] = obj[key]
+        }
     }
     return newObj
 }
