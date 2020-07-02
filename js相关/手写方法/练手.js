@@ -101,7 +101,7 @@ Function.prototype._call = function(context){
     delete context[key]    
 }
 
-Function.prorotype._apply = function(context){
+Function.prototype._apply = function(context){
     context = context || window
     let args = Array.from(arguments.slice(1))
     let key = Date.now().toString(32).slice(0,8)
@@ -188,7 +188,7 @@ Function.prototype._bind = function(context){
     }
 }
 
-Function.prorotype._call = function(context){
+Function.prototype._call = function(context){
     context = context || window
     let args = Array.fron(arguments).slice(1)
     let key = Date.now().toString(32).slice(0,8)
@@ -273,7 +273,7 @@ function _instanceOf(left,right){
     }
 }
 
-Function.protrotype._call = function(context){
+Function.prototype._call = function(context){
     context = context || window
     let args = Array.fron(arguments).slice(1)
     let key = Date.now().toString(32).slice(0,8)
@@ -281,4 +281,25 @@ Function.protrotype._call = function(context){
     let res = context[key](...args)
     delete context[key]
     return res
+}
+
+Function.prototype._apply = function(context){
+    context = context || window
+    let args = Array.fron(arguments).slice(1)
+    let key = Date.now().toString(32).slice(0,8)
+    context[key] = this
+    let res = context[key](args)
+    delete context[key]
+    return res
+}
+
+Function.prototype._bind = function(context){
+    let me = this
+    let args = Array.from(arguments).slice(1)
+    return function(){
+        if(this instanceof me){
+            return this.apply(me,arguments.concat(args))
+        }
+        context.apply(me,arguments.concat(args))
+    }
 }
