@@ -303,3 +303,78 @@ Function.prototype._bind = function(context){
         context.apply(me,arguments.concat(args))
     }
 }
+
+/**
+ * 2020-07-03 22:12:05
+ */
+
+ function debounce(fn,wait){
+    let timer;
+    return function(){
+        clearTimeout(timer)
+        let context = this;
+        let args = Array.fron(arguments)
+        timer = setTimeout(
+            fn.apply(context,args)
+        )
+    }
+ }
+
+ function throttle(fn,wait){
+    let timer = 0;
+    return function(){
+        if(Date.now() - timer > wait){
+            timer = Date.now()
+            let context = this;
+            let args = Array.from(arguments)
+            fn.apply(context,args)
+        }
+    }
+ }
+
+ function filtten(arr){
+    return arr.reduce((result,item)=>{
+        return result.concat(Array.isArray(item) ? filtten(item) : item)
+    },[])
+ }
+
+ function _instanceof(left,right){
+    left = left.__proto__
+    right = right.prototype
+    while(true){
+        if(left === null)return false;
+        if(left === right)return true;
+        left = left.__proto__
+    }
+ }
+
+ Function.prototype._call = function(context){
+    context = context || window
+    let args = Array.fron(arguments).slice(1)
+    let key = Date.now().toString(32).slice(0,8)
+    context[key] = this
+    let res = context[key](...args)
+    delete context[key]
+    return res
+ }
+
+ Function.prototype._apply = function(context){
+    context = context || window
+    let args = Array.from(arguments)[0]
+    let key = Date.now().toString(32).slice(0,8)
+    context[key] = this
+    let res = context[key](...args)
+    delete context[key]
+    return res
+ }
+
+ Function.prototype._bind = function(context){
+    let me = this
+    let args = Array.from(arguments).slice(1)
+    return function F(){
+        if(this instanceof F){
+            return this.apply(me,args.concat(arguments))
+        }
+        context.apply(me,args.concat(arguments))
+    }
+ }
