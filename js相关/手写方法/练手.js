@@ -378,3 +378,77 @@ Function.prototype._bind = function(context){
         context.apply(me,args.concat(arguments))
     }
  }
+
+ /**
+  * 2020年07月06日19:50:55
+  */
+
+  function debounce(fn,wait){
+    let timer;
+    return function(){
+        let context = this;
+        let args = Array.fron(arguments)
+        clearTimeout(timer)
+        timer = setTimeout(fn.apply(context,args),wait)
+    }
+  }
+
+  function throttle(fn,wait){
+      let timer = 0;
+      if(Date.now() - timer > wait){
+            return function(){
+                let context = this;
+                let args = Array.from(arguments)
+                timer = Date.now()
+                fn.apply(context,args)
+           }
+      }
+  }
+
+  function filtten(arr){
+      return arr.reduce((result,item)=>{
+          return result.concat(Array.isArray(item) ? filtten(item) : item)
+      },[])
+  }
+  
+  function _instanceof(left,right){
+    left = left.__proto__
+    right = right.prototype
+    while(true){
+        if(left === null)return false;
+        if(left === right)return true;
+        left = left.__proto__
+    }
+  }
+
+  Function.prototype._call = function(context){
+    context = context || window
+    let args = Array.from(arguments).slice(1)
+    let key = Date.now().toString(32).slice(0,8)
+    context[key] = this
+    let res = context[key](...args)
+    delete context[key]
+    return res
+  }
+
+  Function.prototype._apply = function(context){
+    context = context || window
+    let args = Array.from(arguments)
+    let key = Date.now().toString(32).slice(0,8)
+    context[key] = this
+    let res = context[key](...args)
+    delete context[key]
+    return res
+  }
+
+  Function.prototype._bind = function(context){
+    let me = this;
+    let args = Array.from(arguments).slice(1)
+    return function(){
+        if(me instanceof this){
+            this.apply(me,args.concat(arguments))
+            return;
+        }
+        context.apply(me,args.concat(arguments))
+    }
+  }
