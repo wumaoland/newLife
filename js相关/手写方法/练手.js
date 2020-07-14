@@ -483,3 +483,47 @@ Function.prototype._bind = function(context){
         return result.concat(Array.isArray(item) ? filtten(item): item)
     },[])
   }
+
+  /**
+   * 2020年07月14日20:42:29
+   */
+
+   function debounce(fn,wait){
+        let timer;
+        return function(){
+            let context = this;
+            let args = Array.from(arguments).slice(1)
+            clearTimeout(timer)
+            timer = setTimeout(function(){
+                fn.apply(context,args)
+            },wait)
+        }
+   }
+
+   function throttle(fn,wait){
+        let timer = 0;
+        return function(){
+            let context = this;
+            let args = Array.from(arguments).slice(1)
+            if(Date.now() - timer > wait){
+                timer = Date.now()
+                fn.apply(context,args)
+            }
+        }
+   }
+
+   function filltten(arr){
+        return arr.reduce((result,item)=>{
+            return result.concat(Array.isArray(item) ? filltten(item) : item)
+        },[])
+   }
+
+   function _instanceof(left,right){
+        let left = left.__prototype__
+        let right = right === null ? right : right.prototype
+        while(true){
+            if(left === right)return true;
+            if(left === null)return false;
+            left = left.__proto__
+        }
+   }
