@@ -9,10 +9,10 @@ function promiseAll(arr){
         Promise.resolve(item).then(res => {
           resArr.push(res)
           if(resArr.length == arr.length){
-            return resolve(resArr)
+            resolve(resArr)
           }
         },err => {
-          return reject(err)
+          reject(err)
         }).catch(err => {
           console.log(err)
         })
