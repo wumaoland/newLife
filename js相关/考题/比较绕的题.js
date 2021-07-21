@@ -8,10 +8,10 @@ a  = {
     },
     valueOf:function(){
         return this.b++
-    }//两者均可
+    }
 }
 
-//2、
+//2、需要怎样做 a ==1 && a== 2 && a==3 为 true？
 a = [1,2,3]
 a.toString = a.shift
 a.join = a.shift
